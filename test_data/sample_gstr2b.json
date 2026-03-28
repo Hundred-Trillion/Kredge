@@ -1,0 +1,195 @@
+{
+  "data": {
+    "gstin": "27AABCM1234A1Z5",
+    "fp": "032026",
+    "docdata": {
+      "b2b": [
+        {
+          "ctin": "27AAACR5678B1Z3",
+          "trdnm": "Reliance Steel Ltd.",
+          "inv": [
+            {
+              "inum": "INV-2026-0834",
+              "idt": "05-03-2026",
+              "val": 450000,
+              "pos": "27",
+              "rev": "N",
+              "itcavl": "Y",
+              "rsn": "",
+              "diffprcnt": 1,
+              "itms": [
+                {
+                  "num": 1,
+                  "itm_det": {
+                    "rt": 18,
+                    "txval": 450000,
+                    "iamt": 81000,
+                    "camt": 0,
+                    "samt": 0,
+                    "csamt": 0
+                  }
+                }
+              ]
+            },
+            {
+              "inum": "INV-2026-0901",
+              "idt": "10-03-2026",
+              "val": 320000,
+              "pos": "27",
+              "rev": "N",
+              "itcavl": "Y",
+              "itms": [
+                {
+                  "num": 1,
+                  "itm_det": {
+                    "rt": 18,
+                    "txval": 320000,
+                    "iamt": 57600,
+                    "camt": 0,
+                    "samt": 0,
+                    "csamt": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ctin": "24AAACT1234C1Z1",
+          "trdnm": "Tata Chemicals Pvt Ltd",
+          "inv": [
+            {
+              "inum": "TC/23-24/1567",
+              "idt": "12-03-2026",
+              "val": 250000,
+              "pos": "24",
+              "rev": "N",
+              "itcavl": "Y",
+              "itms": [
+                {
+                  "num": 1,
+                  "itm_det": {
+                    "rt": 18,
+                    "txval": 250000,
+                    "iamt": 45000,
+                    "camt": 0,
+                    "samt": 0,
+                    "csamt": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ctin": "24AAACA7890F1Z2",
+          "trdnm": "Ambuja Cements Ltd",
+          "inv": [
+            {
+              "inum": "AMB/24/09823",
+              "idt": "03-03-2026",
+              "val": 120000,
+              "pos": "24",
+              "rev": "N",
+              "itcavl": "Y",
+              "itms": [
+                {
+                  "num": 1,
+                  "itm_det": {
+                    "rt": 18,
+                    "txval": 120000,
+                    "iamt": 21600,
+                    "camt": 0,
+                    "samt": 0,
+                    "csamt": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ctin": "27AABCS4567G1Z4",
+          "trdnm": "Supreme Industries",
+          "inv": [
+            {
+              "inum": "SI-MAR-2026-100",
+              "idt": "01-03-2026",
+              "val": 185000,
+              "pos": "27",
+              "rev": "N",
+              "itcavl": "Y",
+              "itms": [
+                {
+                  "num": 1,
+                  "itm_det": {
+                    "rt": 18,
+                    "txval": 185000,
+                    "iamt": 33300,
+                    "camt": 0,
+                    "samt": 0,
+                    "csamt": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ctin": "27AAACL8901H1Z6",
+          "trdnm": "Larsen & Toubro",
+          "inv": [
+            {
+              "inum": "LT-WO-56789",
+              "idt": "10-03-2026",
+              "val": 88000,
+              "pos": "27",
+              "rev": "N",
+              "itcavl": "Y",
+              "itms": [
+                {
+                  "num": 1,
+                  "itm_det": {
+                    "rt": 18,
+                    "txval": 88000,
+                    "iamt": 15840,
+                    "camt": 0,
+                    "samt": 0,
+                    "csamt": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ctin": "07AABCH1234K1Z3",
+          "trdnm": "Havells India Ltd",
+          "inv": [
+            {
+              "inum": "HAV/MAR/8821",
+              "idt": "22-03-2026",
+              "val": 40000,
+              "pos": "07",
+              "rev": "N",
+              "itcavl": "Y",
+              "itms": [
+                {
+                  "num": 1,
+                  "itm_det": {
+                    "rt": 18,
+                    "txval": 40000,
+                    "iamt": 7200,
+                    "camt": 0,
+                    "samt": 0,
+                    "csamt": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
