@@ -15,7 +15,9 @@ import {
   Percent,
   FileText,
   CheckCircle,
+  MailWarning
 } from 'lucide-react'
+import ChaseSuppliersModal from '../components/ChaseSuppliersModal'
 
 // Demo data — the hero screen experience
 const DEMO_RUN = {
@@ -54,6 +56,7 @@ export default function ReconciliationResults() {
   const [loading, setLoading] = useState(true)
   const [downloading, setDownloading] = useState(false)
   const [sendingWhatsApp, setSendingWhatsApp] = useState(false)
+  const [isChaseModalOpen, setIsChaseModalOpen] = useState(false)
 
   useEffect(() => {
     if (isDemoMode || runId === 'demo-result') {
@@ -233,23 +236,40 @@ export default function ReconciliationResults() {
 
       {/* Actions */}
       <div className="flex items-center gap-4 pt-4 border-t border-surface-border">
-        <button onClick={handleDownloadPDF} disabled={downloading} className="btn-primary">
+        {missingIn2B > 0 && (
+          <button 
+            onClick={() => setIsChaseModalOpen(true)}
+            className="btn-primary bg-electric text-white hover:bg-electric/90 border-0 flex items-center gap-2 shadow-[0_0_15px_rgba(45,111,247,0.3)] transition-all"
+          >
+            <MailWarning size={16} />
+            Chase Defaulting Suppliers
+          </button>
+        )}
+        <button onClick={handleDownloadPDF} disabled={downloading} className="btn-secondary flex items-center gap-2">
           {downloading ? (
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           ) : (
             <Download size={16} />
           )}
-          {downloading ? 'Generating...' : 'Download PDF Report'}
+          {downloading ? 'PDF...' : 'Download PDF'}
         </button>
-        <button onClick={handleWhatsApp} disabled={sendingWhatsApp} className="btn-ghost">
+        <button onClick={handleWhatsApp} disabled={sendingWhatsApp} className="btn-ghost flex items-center gap-2">
           {sendingWhatsApp ? (
             <span className="w-4 h-4 border-2 border-navy-300/30 border-t-navy-300 rounded-full animate-spin" />
           ) : (
             <MessageCircle size={16} />
           )}
-          {sendingWhatsApp ? 'Sending...' : 'Send WhatsApp Summary'}
+          {sendingWhatsApp ? 'Sending...' : 'WhatsApp'}
         </button>
       </div>
+
+      {/* Chase Modal */}
+      <ChaseSuppliersModal 
+        isOpen={isChaseModalOpen}
+        onClose={() => setIsChaseModalOpen(false)}
+        runId={runId}
+        mismatches={mismatches}
+      />
     </div>
   )
 }

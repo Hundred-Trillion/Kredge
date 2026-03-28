@@ -12,6 +12,7 @@ import {
   CheckCircle,
   ChevronRight,
   Building2,
+  Share2,
 } from 'lucide-react'
 
 // Demo data
@@ -111,13 +112,26 @@ export default function ClientDetail() {
             </div>
           </div>
         </div>
-        <Link
-          to={`/clients/${id}/reconcile`}
-          className="btn-primary"
-        >
-          <Plus size={16} />
-          New Reconciliation
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              const token = client.portal_token || 'demo-token-123'
+              navigator.clipboard.writeText(`${window.location.origin}/portal/${token}`)
+              alert('Portal Link Copied!')
+            }}
+            className="btn-secondary hidden sm:flex items-center gap-2"
+          >
+            <Share2 size={16} />
+            Share Portal
+          </button>
+          <Link
+            to={`/clients/${id}/reconcile`}
+            className="btn-primary"
+          >
+            <Plus size={16} />
+            New Run
+          </Link>
+        </div>
       </div>
 
       {/* Runs Timeline */}

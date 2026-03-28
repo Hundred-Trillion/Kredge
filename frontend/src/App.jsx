@@ -8,6 +8,10 @@ import Clients from './pages/Clients'
 import ClientDetail from './pages/ClientDetail'
 import NewReconciliation from './pages/NewReconciliation'
 import ReconciliationResults from './pages/ReconciliationResults'
+import Settings from './pages/Settings'
+import Runs from './pages/Runs'
+import Suppliers from './pages/Suppliers'
+import ClientPortal from './pages/ClientPortal'
 
 function AppRoutes() {
   const { isDemoMode, isAuthenticated } = useAuth()
@@ -23,6 +27,9 @@ function AppRoutes() {
             : <Login />
         }
       />
+      
+      {/* Client Portal (Public, Token-Auth only) */}
+      <Route path="/portal/:token" element={<ClientPortal />} />
 
       {/* Protected routes with layout */}
       <Route element={<ProtectedRoute />}>
@@ -32,34 +39,15 @@ function AppRoutes() {
           <Route path="/clients/:id" element={<ClientDetail />} />
           <Route path="/clients/:id/reconcile" element={<NewReconciliation />} />
           <Route path="/runs/:runId" element={<ReconciliationResults />} />
-          <Route path="/settings" element={<SettingsPlaceholder />} />
-          <Route path="/runs" element={<RunsPlaceholder />} />
+          <Route path="/runs" element={<Runs />} />
+          <Route path="/suppliers" element={<Suppliers />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Route>
 
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
-}
-
-function SettingsPlaceholder() {
-  return (
-    <div className="space-y-4 animate-fade-in">
-      <h1 className="text-2xl font-bold text-white">Settings</h1>
-      <div className="card p-8 text-center">
-        <p className="text-navy-300">Settings page coming in v2.</p>
-        <p className="text-xs text-navy-500 mt-2">Firm profile, notification preferences, WhatsApp configuration</p>
-      </div>
-    </div>
-  )
-}
-
-function RunsPlaceholder() {
-  return (
-    <div className="animate-fade-in">
-      <Navigate to="/" replace />
-    </div>
   )
 }
 

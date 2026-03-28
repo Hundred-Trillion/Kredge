@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     WHATSAPP_PHONE_NUMBER_ID: str = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "")
     WHATSAPP_ACCESS_TOKEN: str = os.getenv("WHATSAPP_ACCESS_TOKEN", "")
 
+    # Resend Email (V2)
+    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+
+    # Cron Security (V2)
+    CRON_SECRET: str = os.getenv("CRON_SECRET", "kredge_dev_cron_secret")
+
     # CORS
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
     ALLOWED_ORIGINS: str = os.getenv(

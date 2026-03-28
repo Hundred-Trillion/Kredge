@@ -97,11 +97,34 @@ A sample GSTR-2B JSON is included at `test_data/sample_gstr2b.json`.
 3. Build command: `npm run build`
 4. Output directory: `dist`
 
-### Backend → Railway
-1. Connect `backend/` directory to Railway
-2. Set environment variables
-3. Railway auto-detects `railway.toml` config
+## V2 Features & Architecture
+
+Since the initial release, Kredge has been extended with the following V2 enterprise capabilities:
+
+### Supplier Engine & Automated Emails
+Kredge calculates a global **Supplier Risk Score** (GREEN/YELLOW/RED) based on mismatch frequency across the firm's entire client base. When mismatches are found, CAs can initiate the **"Chase Suppliers"** workflow to automatically generate and send discrepancy reports directly to the defaulting suppliers leveraging the **Resend API**.
+
+### Client Portal
+CAs can issue read-only, securely tokenized URLs (`/portal/:token`) directly to their clients. This allows the end-business to monitor their ITC recovered and mismatch velocity without needing a Kredge account.
+
+### Automated Monthly Summaries (Cron)
+Kredge aggregates firm-wide statistics on the 1st of every month automatically.
+- **Cron Setup (Railway)**: Since Railway lacks a native cron UI, Kredge exposes a secured webhook at `POST /api/v1/cron/monthly-summary`. You must set up an external scheduler (e.g., [cron-job.org](https://cron-job.org) or GitHub Actions) to hit this endpoint on schedule. Include the `Authorization: Bearer <CRON_SECRET>` header.
+
+## Environment Variables (V2 Updates)
+
+### Backend (.env addition)
+```
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+CRON_SECRET=your_secure_random_string   # For securing the monthly cron webhook
+```
 
 ---
 
+## License
+
+Kredge is licensed under the **Business Source License 1.1 (BSL)** by **L88 Laboratories**.
+You may use the source code for free for non-production, testing, and development purposes. Production use (generating revenue or providing CA services) requires a commercial agreement. On the change date (2030-01-01), the license reverts to the Apache 2.0 License. See the `LICENSE` file for details.
+
 Built with ♠ by Kredge | kredge.in
+

@@ -3,14 +3,16 @@ Reconciliation API endpoints.
 Handles file upload, reconciliation triggering, and results retrieval.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks
 from typing import List, Optional
 import uuid
+import asyncio
 from datetime import datetime
 
 from app.dependencies import get_current_user
 from app.core.supabase_client import get_supabase
 from app.services.reconciliation_engine import run_reconciliation
+from app.services.risk_scorer import update_supplier_risk_scores
 from app.schemas.reconciliation import ReconciliationRunResponse, MismatchResponse
 
 router = APIRouter(prefix="/reconciliation", tags=["Reconciliation"])
@@ -22,6 +24,7 @@ _demo_mismatches = {}
 
 @router.post("/run")
 async def trigger_reconciliation(
+    background_tasks: BackgroundTasks,
     purchase_register: UploadFile = File(...),
     gstr2b: UploadFile = File(...),
     client_id: str = Form(...),
@@ -95,6 +98,9 @@ async def trigger_reconciliation(
             mismatches_with_run.append(m)
         _demo_mismatches[run_id] = mismatches_with_run
 
+        user_id = user.get("id") if user else "demo_user"
+        background_tasks.add_task(update_supplier_risk_scores, user_id)
+
         return {"run_id": run_id, "status": "completed", **result}
 
     # Store in Supabase
@@ -134,8 +140,9 @@ async def trigger_reconciliation(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save results: {str(e)}")
 
+    user_id = user.get("id") if user else "demo_user"
+    background_tasks.add_task(update_supplier_risk_scores, user_id)
     return {"run_id": run_id, "status": "completed", **result}
-
 
 @router.get("/runs/{run_id}")
 async def get_run(run_id: str, user: dict = Depends(get_current_user)):

@@ -8,12 +8,14 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  Building2,
 } from 'lucide-react'
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/clients', icon: Users, label: 'Clients' },
   { to: '/runs', icon: FileSearch, label: 'Runs' },
+  { to: '/suppliers', icon: Building2, label: 'Suppliers' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ]
 

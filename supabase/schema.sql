@@ -235,3 +235,118 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ============================================================
+-- V2 Schema Additions
+-- ============================================================
+
+-- Extend Users
+ALTER TABLE public.users 
+    ADD COLUMN IF NOT EXISTS whatsapp_alerts BOOLEAN DEFAULT false,
+    ADD COLUMN IF NOT EXISTS email_signature TEXT,
+    ADD COLUMN IF NOT EXISTS deadline_buffer_days INTEGER DEFAULT 5;
+
+-- Extend Clients with public link access
+ALTER TABLE public.clients 
+    ADD COLUMN IF NOT EXISTS portal_token UUID DEFAULT gen_random_uuid();
+
+-- ============================================================
+-- SUPPLIER PROFILES (V2)
+-- ============================================================
+CREATE TYPE risk_level AS ENUM ('GREEN', 'YELLOW', 'RED');
+
+CREATE TABLE public.supplier_profiles (
+    id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id              UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    supplier_gstin       TEXT NOT NULL,
+    supplier_name        TEXT NOT NULL,
+    risk_level           risk_level DEFAULT 'GREEN',
+    consecutive_defaults INTEGER DEFAULT 0,
+    total_itc_loss       NUMERIC(15,2) DEFAULT 0,
+    updated_at           TIMESTAMPTZ DEFAULT NOW(),
+    created_at           TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, supplier_gstin)
+);
+
+CREATE INDEX idx_supplier_profiles_user_id ON public.supplier_profiles(user_id);
+CREATE INDEX idx_supplier_profiles_risk ON public.supplier_profiles(risk_level);
+
+COMMENT ON TABLE public.supplier_profiles IS 'Tracks supplier reliability across a CAs entire client base';
+
+-- ============================================================
+-- FOLLOW UP EMAILS (V2)
+-- ============================================================
+CREATE TYPE email_status AS ENUM ('PENDING', 'SENT', 'RESPONDED', 'FAILED');
+
+CREATE TABLE public.follow_up_emails (
+    id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    run_id              UUID NOT NULL REFERENCES public.reconciliation_runs(id) ON DELETE CASCADE,
+    supplier_profile_id UUID NOT NULL REFERENCES public.supplier_profiles(id) ON DELETE CASCADE,
+    email_to            TEXT NOT NULL,
+    subject             TEXT NOT NULL,
+    body                TEXT NOT NULL,
+    status              email_status DEFAULT 'PENDING',
+    sent_at             TIMESTAMPTZ,
+    created_at          TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_follow_up_emails_run_id ON public.follow_up_emails(run_id);
+CREATE INDEX idx_follow_up_emails_supplier ON public.follow_up_emails(supplier_profile_id);
+
+COMMENT ON TABLE public.follow_up_emails IS 'Automated follow-up emails sent via Resend API';
+
+-- ============================================================
+-- MONTHLY SUMMARIES (V2)
+-- ============================================================
+CREATE TABLE public.monthly_summaries (
+    id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id        UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    period_month   INTEGER NOT NULL,
+    period_year    INTEGER NOT NULL,
+    message_body   TEXT NOT NULL,
+    sent_status    BOOLEAN DEFAULT false,
+    created_at     TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_monthly_summaries_user_id ON public.monthly_summaries(user_id);
+
+-- ============================================================
+-- RLS for V2 Tables
+-- ============================================================
+
+ALTER TABLE public.supplier_profiles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "supplier_profiles_select_own" ON public.supplier_profiles FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "supplier_profiles_insert_own" ON public.supplier_profiles FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "supplier_profiles_update_own" ON public.supplier_profiles FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "supplier_profiles_delete_own" ON public.supplier_profiles FOR DELETE USING (auth.uid() = user_id);
+
+ALTER TABLE public.follow_up_emails ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "follow_up_emails_select_own" ON public.follow_up_emails
+    FOR SELECT USING (
+        run_id IN (
+            SELECT r.id FROM public.reconciliation_runs r
+            JOIN public.clients c ON r.client_id = c.id
+            WHERE c.user_id = auth.uid()
+        )
+    );
+CREATE POLICY "follow_up_emails_insert_own" ON public.follow_up_emails
+    FOR INSERT WITH CHECK (
+        run_id IN (
+            SELECT r.id FROM public.reconciliation_runs r
+            JOIN public.clients c ON r.client_id = c.id
+            WHERE c.user_id = auth.uid()
+        )
+    );
+CREATE POLICY "follow_up_emails_update_own" ON public.follow_up_emails
+    FOR UPDATE USING (
+        run_id IN (
+            SELECT r.id FROM public.reconciliation_runs r
+            JOIN public.clients c ON r.client_id = c.id
+            WHERE c.user_id = auth.uid()
+        )
+    );
+
+ALTER TABLE public.monthly_summaries ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "monthly_summaries_select_own" ON public.monthly_summaries FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "monthly_summaries_insert_own" ON public.monthly_summaries FOR INSERT WITH CHECK (auth.uid() = user_id);
+
