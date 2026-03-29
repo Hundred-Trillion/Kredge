@@ -16,6 +16,7 @@ class SettingsUpdate(BaseModel):
     deadline_buffer_days: int
 
 @router.put("/me")
+@router.put("/me/")
 async def update_settings(settings: SettingsUpdate, user: dict = Depends(get_current_user)):
     """Update CA firm preferences and settings."""
     supabase = get_supabase()

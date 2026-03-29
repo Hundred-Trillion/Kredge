@@ -47,7 +47,7 @@ export default function SettingsPage() {
       const token = data.session?.access_token
       if (!token) throw new Error("No active session")
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/settings/me`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/settings/me/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
