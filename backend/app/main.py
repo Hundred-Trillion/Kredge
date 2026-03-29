@@ -27,12 +27,13 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-# Configure CORS
-# Uses a regex to allow any Vercel subdomain or localhost for development
+# Configure CORS (Universal Mode)
+# Since we use JWT in 'Authorization' headers (not cookies), 
+# origins=["*"] combined with allow_credentials=False is the most robust setup for Vercel.
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:.*",
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -55,7 +56,7 @@ app.include_router(api_router)
 async def root():
     return {
         "name": "Kredge API",
-        "version": app_settings.APP_VERSION,
+        "version": "2.2-stable-cors",
         "tagline": "Recover what's yours.",
         "status": "running",
         "supabase_configured": app_settings.is_supabase_configured,
