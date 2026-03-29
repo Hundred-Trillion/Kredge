@@ -27,13 +27,11 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-# Configure CORS (Universal Mode)
-# Since we use JWT in 'Authorization' headers (not cookies), 
-# origins=["*"] combined with allow_credentials=False is the most robust setup for Vercel.
+# Configure CORS (Final universal mode with credentials)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origin_regex=r".*",
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
