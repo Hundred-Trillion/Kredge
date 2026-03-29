@@ -56,7 +56,7 @@
   }
 
   /* Form inputs */
-  .input {
+  .input, .input-field {
     @apply w-full px-4 py-3 bg-navy-800 border border-surface-border rounded-lg
            text-white placeholder-navy-200 
            focus:outline-none focus:border-electric focus:ring-1 focus:ring-electric/30
