@@ -5,7 +5,7 @@ import asyncio
 
 from app.core.config import settings
 from app.core.supabase_client import get_supabase
-from app.services.whatsapp_service import format_inr
+from app.services.telegram_service import format_inr, send_telegram_message
 
 router = APIRouter(prefix="/cron", tags=["Cron Jobs"])
 security = HTTPBearer()
@@ -20,7 +20,7 @@ def verify_cron_secret(credentials: HTTPAuthorizationCredentials = Depends(secur
 async def generate_monthly_summaries(authorized: bool = Depends(verify_cron_secret)):
     """
     Cron Job trigger: Generates the monthly summary for every active CA firm
-    based on the previous month's reconciliation data, sending WhatsApp alerts.
+    based on the previous month's reconciliation data, sending Telegram alerts.
     """
     supabase = get_supabase()
     if supabase is None:
@@ -33,8 +33,8 @@ async def generate_monthly_summaries(authorized: bool = Depends(verify_cron_secr
     target_month = last_month_date.month
     target_year = last_month_date.year
 
-    # Get all users (CA firms) who have whatsapp alerts enabled
-    users_resp = supabase.table("users").select("id, phone, name, whatsapp_alerts").eq("whatsapp_alerts", True).execute()
+    # Get all users (CA firms) who have telegram alerts enabled
+    users_resp = supabase.table("users").select("id, telegram_chat_id, name, telegram_alerts").eq("telegram_alerts", True).execute()
     users = users_resp.data
 
     if not users:
@@ -44,7 +44,7 @@ async def generate_monthly_summaries(authorized: bool = Depends(verify_cron_secr
     
     for user in users:
         user_id = user["id"]
-        phone = user.get("phone")
+        chat_id = user.get("telegram_chat_id")
         ca_name = user.get("name", "CA")
         
         # We need to construct a summary
@@ -79,14 +79,12 @@ async def generate_monthly_summaries(authorized: bool = Depends(verify_cron_secr
             "period_month": target_month,
             "period_year": target_year,
             "message_body": message_body,
-            "sent_status": bool(phone)
+            "sent_status": bool(chat_id)
         }).execute()
         
-        # 2. Dispatch WhatsApp if phone exists
-        if phone:
-            # Here we would integrate with our WhatsApp service send text mechanism
-            # (which we can extend if needed, currently whatsapp_service.py focuses on alerts)
-            pass
+        # 2. Dispatch Telegram if chat_id exists
+        if chat_id:
+            await send_telegram_message(chat_id, message_body)
             
         summary_count += 1
         

@@ -220,12 +220,12 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public.users (id, name, email, phone, firm_name)
+    INSERT INTO public.users (id, name, email, telegram_chat_id, firm_name)
     VALUES (
         NEW.id,
         COALESCE(NEW.raw_user_meta_data->>'name', 'User'),
         NEW.email,
-        COALESCE(NEW.raw_user_meta_data->>'phone', NULL),
+        COALESCE(NEW.raw_user_meta_data->>'telegram_chat_id', NULL),
         COALESCE(NEW.raw_user_meta_data->>'firm_name', 'My Firm')
     );
     RETURN NEW;
@@ -242,7 +242,8 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
 
 -- Extend Users
 ALTER TABLE public.users 
-    ADD COLUMN IF NOT EXISTS whatsapp_alerts BOOLEAN DEFAULT false,
+    ADD COLUMN IF NOT EXISTS telegram_chat_id TEXT,
+    ADD COLUMN IF NOT EXISTS telegram_alerts BOOLEAN DEFAULT false,
     ADD COLUMN IF NOT EXISTS email_signature TEXT,
     ADD COLUMN IF NOT EXISTS deadline_buffer_days INTEGER DEFAULT 5;
 

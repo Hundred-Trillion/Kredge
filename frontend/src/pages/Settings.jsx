@@ -12,8 +12,8 @@ export default function SettingsPage() {
   
   const [formData, setFormData] = useState({
     firm_name: profile?.firm_name || 'Sharma & Associates',
-    phone: profile?.phone || '+91 98765 43210',
-    whatsapp_alerts: profile?.whatsapp_alerts ?? true,
+    telegram_chat_id: profile?.telegram_chat_id || '',
+    telegram_alerts: profile?.telegram_alerts ?? true,
     email_signature: profile?.email_signature || 'Best regards,\nRajesh Sharma\nSharma & Associates',
     default_gst_rate: profile?.default_gst_rate || 18.0,
     deadline_buffer_days: profile?.deadline_buffer_days || 5,
@@ -105,15 +105,16 @@ export default function SettingsPage() {
             </div>
             
             <div className="space-y-1">
-              <label className="text-sm font-medium text-navy-300">Contact Phone (for WhatsApp)</label>
+              <label className="text-sm font-medium text-navy-300">Telegram Chat ID</label>
               <input
                 type="text"
-                name="phone"
-                value={formData.phone}
+                name="telegram_chat_id"
+                value={formData.telegram_chat_id}
                 onChange={handleChange}
                 className="input-field w-full text-white"
-                placeholder="+91..."
+                placeholder="Ex: 123456789"
               />
+              <p className="text-xs text-navy-500">Get your ID from @userinfobot on Telegram.</p>
             </div>
             
             <div className="space-y-1">
@@ -165,23 +166,23 @@ export default function SettingsPage() {
               <div className="relative inline-block w-12 mr-2 align-middle transition duration-200 ease-in select-none">
                 <input
                   type="checkbox"
-                  name="whatsapp_alerts"
-                  id="whatsapp_alerts"
-                  checked={formData.whatsapp_alerts}
+                  name="telegram_alerts"
+                  id="telegram_alerts"
+                  checked={formData.telegram_alerts}
                   onChange={handleChange}
                   className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out"
-                  style={{ transform: formData.whatsapp_alerts ? 'translateX(100%)' : 'translateX(0)', borderColor: formData.whatsapp_alerts ? '#2D6FF7' : '#1e293b' }}
+                  style={{ transform: formData.telegram_alerts ? 'translateX(100%)' : 'translateX(0)', borderColor: formData.telegram_alerts ? '#2D6FF7' : '#1e293b' }}
                 />
                 <label
-                  htmlFor="whatsapp_alerts"
+                  htmlFor="telegram_alerts"
                   className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer transition-colors duration-200 ease-in-out ${
-                    formData.whatsapp_alerts ? 'bg-electric-blue' : 'bg-slate-800'
+                    formData.telegram_alerts ? 'bg-electric-blue' : 'bg-slate-800'
                   }`}
                 ></label>
               </div>
-              <label htmlFor="whatsapp_alerts" className="text-sm font-medium text-white cursor-pointer select-none flex flex-col">
-                <span>WhatsApp Alerts</span>
-                <span className="text-xs text-navy-400 font-normal">Receive run completion & monthly summaries on WhatsApp.</span>
+              <label htmlFor="telegram_alerts" className="text-sm font-medium text-white cursor-pointer select-none flex flex-col">
+                <span>Telegram Alerts</span>
+                <span className="text-xs text-navy-400 font-normal">Receive run completion & monthly summaries on Telegram.</span>
               </label>
             </div>
           </div>

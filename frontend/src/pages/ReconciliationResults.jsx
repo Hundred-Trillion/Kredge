@@ -8,14 +8,8 @@ import axios from 'axios'
 import {
   ArrowLeft,
   Download,
-  MessageCircle,
-  AlertTriangle,
-  FileWarning,
-  ShieldAlert,
-  Percent,
-  FileText,
-  CheckCircle,
-  MailWarning
+  MailWarning,
+  Send
 } from 'lucide-react'
 import ChaseSuppliersModal from '../components/ChaseSuppliersModal'
 
@@ -55,7 +49,7 @@ export default function ReconciliationResults() {
   const [mismatches, setMismatches] = useState([])
   const [loading, setLoading] = useState(true)
   const [downloading, setDownloading] = useState(false)
-  const [sendingWhatsApp, setSendingWhatsApp] = useState(false)
+  const [sendingTelegram, setSendingTelegram] = useState(false)
   const [isChaseModalOpen, setIsChaseModalOpen] = useState(false)
 
   useEffect(() => {
@@ -108,20 +102,20 @@ export default function ReconciliationResults() {
     }
   }
 
-  async function handleWhatsApp() {
-    setSendingWhatsApp(true)
+  async function handleTelegram() {
+    setSendingTelegram(true)
     try {
       if (isDemoMode) {
         await new Promise((r) => setTimeout(r, 1000))
-        alert('WhatsApp alerts require API configuration.')
+        alert('Telegram alerts require API configuration.')
         return
       }
-      await axios.post(apiUrl(`/api/v1/whatsapp/send`), { run_id: runId })
-      alert('WhatsApp summary sent successfully!')
+      await axios.post(apiUrl(`/api/v1/telegram/send`), { run_id: runId })
+      alert('Telegram summary sent successfully!')
     } catch (err) {
-      alert('Failed to send WhatsApp alert.')
+      alert('Failed to send Telegram alert.')
     } finally {
-      setSendingWhatsApp(false)
+      setSendingTelegram(false)
     }
   }
 
@@ -253,13 +247,13 @@ export default function ReconciliationResults() {
           )}
           {downloading ? 'PDF...' : 'Download PDF'}
         </button>
-        <button onClick={handleWhatsApp} disabled={sendingWhatsApp} className="btn-ghost flex items-center gap-2">
-          {sendingWhatsApp ? (
+        <button onClick={handleTelegram} disabled={sendingTelegram} className="btn-ghost flex items-center gap-2">
+          {sendingTelegram ? (
             <span className="w-4 h-4 border-2 border-navy-300/30 border-t-navy-300 rounded-full animate-spin" />
           ) : (
-            <MessageCircle size={16} />
+            <Send size={16} />
           )}
-          {sendingWhatsApp ? 'Sending...' : 'WhatsApp'}
+          {sendingTelegram ? 'Sending...' : 'Telegram'}
         </button>
       </div>
 

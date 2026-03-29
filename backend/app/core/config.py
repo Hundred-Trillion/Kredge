@@ -18,9 +18,8 @@ class Settings(BaseSettings):
     SUPABASE_ANON_KEY: str = os.getenv("SUPABASE_ANON_KEY", "")
     JWT_SECRET: str = os.getenv("JWT_SECRET", "")
 
-    # WhatsApp Cloud API
-    WHATSAPP_PHONE_NUMBER_ID: str = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "")
-    WHATSAPP_ACCESS_TOKEN: str = os.getenv("WHATSAPP_ACCESS_TOKEN", "")
+    # Telegram Bot API (V2.1)
+    TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
 
     # Resend Email (V2)
     RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
@@ -43,8 +42,8 @@ class Settings(BaseSettings):
         return bool(self.SUPABASE_URL and self.SUPABASE_SERVICE_KEY)
 
     @property
-    def is_whatsapp_configured(self) -> bool:
-        return bool(self.WHATSAPP_PHONE_NUMBER_ID and self.WHATSAPP_ACCESS_TOKEN)
+    def is_telegram_configured(self) -> bool:
+        return bool(self.TELEGRAM_BOT_TOKEN)
 
     class Config:
         env_file = ".env"

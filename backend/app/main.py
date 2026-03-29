@@ -12,7 +12,7 @@ from app.core.supabase_client import get_supabase
 from app.api.v1.reconciliation import router as reconciliation_router
 from app.api.v1.clients import router as clients_router
 from app.api.v1.reports import router as reports_router
-from app.api.v1.whatsapp import router as whatsapp_router
+from app.api.v1.telegram import router as telegram_router
 from app.api.v1.suppliers import router as suppliers_router
 from app.api.v1.settings import router as settings_router
 from app.api.v1.portal import router as portal_router
@@ -41,7 +41,7 @@ api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(clients_router)
 api_router.include_router(reconciliation_router)
 api_router.include_router(reports_router)
-api_router.include_router(whatsapp_router)
+api_router.include_router(telegram_router)
 api_router.include_router(suppliers_router)
 api_router.include_router(settings_router)
 api_router.include_router(portal_router)
@@ -58,7 +58,7 @@ async def root():
         "tagline": "Recover what's yours.",
         "status": "running",
         "supabase_configured": app_settings.is_supabase_configured,
-        "whatsapp_configured": app_settings.is_whatsapp_configured,
+        "telegram_configured": app_settings.is_telegram_configured,
     }
 
 
