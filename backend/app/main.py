@@ -28,13 +28,11 @@ app = FastAPI(
 )
 
 # Configure CORS
-origins = app_settings.cors_origins
-# If origins is ["*"], allow_credentials must be False
-allow_all = "*" in origins
+# Uses a regex to allow any Vercel subdomain or localhost for development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins if origins else ["*"],
-    allow_credentials=not allow_all,
+    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:.*",
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
