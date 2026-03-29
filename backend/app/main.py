@@ -52,6 +52,12 @@ api_router.include_router(cron_router)
 app.include_router(api_router)
 
 
+# Manual OPTIONS preflight handler for extra resilience
+@app.options("/{full_path:path}")
+async def preflight_handler(full_path: str):
+    return {"status": "ok"}
+
+
 @app.get("/")
 async def root():
     return {
