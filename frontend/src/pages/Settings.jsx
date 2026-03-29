@@ -47,7 +47,11 @@ export default function SettingsPage() {
       const token = data.session?.access_token
       if (!token) throw new Error("No active session")
 
-      const apiUrl = `${import.meta.env.VITE_API_URL || ''}/api/v1/settings/me/`
+      let baseUrl = import.meta.env.VITE_API_URL || ''
+      if (baseUrl && !baseUrl.startsWith('http')) {
+        baseUrl = `https://${baseUrl}`
+      }
+      const apiUrl = `${baseUrl}/api/v1/settings/me/`
       const res = await fetch(apiUrl, {
         method: 'PUT',
         headers: {
