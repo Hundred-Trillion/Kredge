@@ -15,7 +15,7 @@ Kredge helps chartered accountants reconcile Input Tax Credit between purchase r
 | File Parsing | openpyxl (Excel), json (GSTR-2B) |
 | Reconciliation | Pandas |
 | PDF Reports | WeasyPrint + Jinja2 |
-| WhatsApp Alerts | Meta WhatsApp Cloud API |
+| Telegram Alerts | Telegram Bot API |
 | Frontend Hosting | Vercel |
 | Backend Hosting | Railway |
 
@@ -65,8 +65,7 @@ VITE_API_URL=http://localhost:8000
 SUPABASE_URL=your-supabase-url
 SUPABASE_SERVICE_KEY=your-service-role-key
 JWT_SECRET=your-jwt-secret
-WHATSAPP_PHONE_NUMBER_ID=your-wa-phone-id
-WHATSAPP_ACCESS_TOKEN=your-wa-token
+TELEGRAM_BOT_TOKEN=your-telegram-bot-token
 FRONTEND_URL=http://localhost:5173
 ```
 
@@ -109,6 +108,7 @@ CAs can issue read-only, securely tokenized URLs (`/portal/:token`) directly to 
 
 ### Automated Monthly Summaries (Cron)
 Kredge aggregates firm-wide statistics on the 1st of every month automatically.
+- **Telegram Reports**: Summaries are dispatched directly to the CA firm's Telegram via Bot API.
 - **Cron Setup (Railway)**: Since Railway lacks a native cron UI, Kredge exposes a secured webhook at `POST /api/v1/cron/monthly-summary`. You must set up an external scheduler (e.g., [cron-job.org](https://cron-job.org) or GitHub Actions) to hit this endpoint on schedule. Include the `Authorization: Bearer <CRON_SECRET>` header.
 
 ## Environment Variables (V2 Updates)
