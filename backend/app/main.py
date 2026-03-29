@@ -54,11 +54,11 @@ app.include_router(api_router)
 async def root():
     return {
         "name": "Kredge API",
-        "version": settings.APP_VERSION,
+        "version": app_settings.APP_VERSION,
         "tagline": "Recover what's yours.",
         "status": "running",
-        "supabase_configured": settings.is_supabase_configured,
-        "whatsapp_configured": settings.is_whatsapp_configured,
+        "supabase_configured": app_settings.is_supabase_configured,
+        "whatsapp_configured": app_settings.is_whatsapp_configured,
     }
 
 
