@@ -10,7 +10,7 @@ const DEMO_USER = {
   user_metadata: {
     name: 'Rajesh Sharma',
     firm_name: 'Sharma & Associates',
-    phone: '+919876543210',
+    telegram_chat_id: '6186383218',
   },
 }
 
@@ -18,7 +18,8 @@ const DEMO_PROFILE = {
   id: 'demo-user-001',
   name: 'Rajesh Sharma',
   email: 'demo@kredge.in',
-  phone: '+919876543210',
+  telegram_chat_id: '6186383218',
+  telegram_alerts: true,
   firm_name: 'Sharma & Associates',
 }
 
@@ -123,7 +124,8 @@ export function AuthProvider({ children }) {
       id: user.id,
       name: user.user_metadata?.name || 'User',
       email: user.email,
-      phone: user.user_metadata?.phone || '',
+      telegram_chat_id: user.user_metadata?.telegram_chat_id || '',
+      telegram_alerts: user.user_metadata?.telegram_alerts ?? true,
       firm_name: user.user_metadata?.firm_name || 'My Firm',
     } : null),
     loading,

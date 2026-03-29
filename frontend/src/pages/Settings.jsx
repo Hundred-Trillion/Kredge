@@ -56,7 +56,10 @@ export default function SettingsPage() {
         body: JSON.stringify(formData)
       })
 
-      if (!res.ok) throw new Error("Failed to save settings to API")
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Failed to save settings to API")
+      }
 
       setSuccess(true)
     } catch (err) {
