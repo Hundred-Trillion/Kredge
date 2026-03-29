@@ -30,7 +30,9 @@ app = FastAPI(
 # Configure CORS (Final universal mode with credentials)
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r".*",
+    allow_origins=[
+        "https://kredge-7haftki7y-hundred-trillions-projects.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
