@@ -27,12 +27,10 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-# Configure CORS (Final universal mode with credentials)
+# Configure CORS (Vercel-specific regex)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://kredge-7haftki7y-hundred-trillions-projects.vercel.app"
-    ],
+    allow_origin_regex=r"https://kredge-.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
