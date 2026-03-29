@@ -5,7 +5,7 @@ import asyncio
 
 from app.core.config import settings
 from app.core.supabase_client import get_supabase
-from app.services.whatsapp_service import format_currency
+from app.services.whatsapp_service import format_inr
 
 router = APIRouter(prefix="/cron", tags=["Cron Jobs"])
 security = HTTPBearer()
@@ -67,7 +67,7 @@ async def generate_monthly_summaries(authorized: bool = Depends(verify_cron_secr
             f"📊 *Kredge Monthly Digest: {last_month_date.strftime('%B %Y')}*\n"
             f"Hello {ca_name},\n\n"
             f"Here is a summary of your automated ITC reconciliations for the past month:\n\n"
-            f"✅ *ITC Recovered:* {format_currency(total_itc_recovered)}\n"
+            f"✅ *ITC Recovered:* {format_inr(total_itc_recovered)}\n"
             f"🧾 *Invoices Processed:* {total_invoices_processed:,}\n"
             f"🏢 *Clients Managed:* {total_clients}\n\n"
             f"Log in to Kredge to view detailed supplier risk reports."

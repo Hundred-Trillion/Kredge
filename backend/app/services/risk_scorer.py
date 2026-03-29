@@ -1,5 +1,5 @@
 from app.core.config import settings
-from app.core.supabase import supabase
+from app.core.supabase_client import get_supabase
 
 async def update_supplier_risk_scores(user_id: str):
     """
@@ -10,6 +10,8 @@ async def update_supplier_risk_scores(user_id: str):
         print("DEMO MODE: Skipping risk score updates (No Supabase)")
         return
         
+    supabase = get_supabase()
+    
     try:
         # High-level algorithm:
         # 1. Fetch all mismatches for all runs belonging to the CA's clients
