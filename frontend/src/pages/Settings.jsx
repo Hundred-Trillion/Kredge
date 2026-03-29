@@ -57,8 +57,21 @@ export default function SettingsPage() {
       })
 
       if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.detail || "Failed to save settings to API")
+        let errorMessage = `Server error: ${res.status}`
+        try {
+          // Only attempt JSON parse if content-type is json
+          const contentType = res.headers.get("content-type")
+          if (contentType && contentType.includes("application/json")) {
+            const errorData = await res.json()
+            errorMessage = errorData.detail || errorMessage
+          } else {
+            const text = await res.text()
+            errorMessage = text.substring(0, 100) || errorMessage
+          }
+        } catch (e) {
+          console.error("Could not parse error response", e)
+        }
+        throw new Error(errorMessage)
       }
 
       setSuccess(true)
