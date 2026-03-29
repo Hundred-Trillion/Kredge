@@ -47,7 +47,8 @@ export default function SettingsPage() {
       const token = data.session?.access_token
       if (!token) throw new Error("No active session")
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/settings/me/`, {
+      const apiUrl = `${import.meta.env.VITE_API_URL || ''}/api/v1/settings/me/`
+      const res = await fetch(apiUrl, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ export default function SettingsPage() {
       })
 
       if (!res.ok) {
-        let errorMessage = `Server error: ${res.status}`
+        let errorMessage = `Server error: ${res.status} [URL: ${apiUrl}]`
         try {
           // Only attempt JSON parse if content-type is json
           const contentType = res.headers.get("content-type")
