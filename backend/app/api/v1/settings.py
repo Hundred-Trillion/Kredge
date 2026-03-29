@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from typing import Optional
 
 from app.dependencies import get_current_user
 from app.core.supabase_client import get_supabase
@@ -8,8 +9,8 @@ router = APIRouter(prefix="/settings", tags=["Settings"])
 
 class SettingsUpdate(BaseModel):
     firm_name: str
-    phone: str
-    whatsapp_alerts: bool
+    telegram_chat_id: Optional[str] = None
+    telegram_alerts: bool
     email_signature: str
     default_gst_rate: float
     deadline_buffer_days: int
@@ -28,8 +29,8 @@ async def update_settings(settings: SettingsUpdate, user: dict = Depends(get_cur
     try:
         supabase.table("users").update({
             "firm_name": settings.firm_name,
-            "phone": settings.phone,
-            "whatsapp_alerts": settings.whatsapp_alerts,
+            "telegram_chat_id": settings.telegram_chat_id,
+            "telegram_alerts": settings.telegram_alerts,
             "email_signature": settings.email_signature,
             "default_gst_rate": settings.default_gst_rate,
             "deadline_buffer_days": settings.deadline_buffer_days
