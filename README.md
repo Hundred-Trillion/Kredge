@@ -126,5 +126,5 @@ CRON_SECRET=your_secure_random_string   # For securing the monthly cron webhook
 Kredge is licensed under the **Business Source License 1.1 (BSL)** by **L88 Laboratories**.
 You may use the source code for free for non-production, testing, and development purposes. Production use (generating revenue or providing CA services) requires a commercial agreement. On the change date (2030-01-01), the license reverts to the Apache 2.0 License. See the `LICENSE` file for details.
 
-Built with ♠ by Kredge | kredge.in
+Built with ♠ by Adithya |
 
